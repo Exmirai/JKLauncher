@@ -18,17 +18,7 @@ namespace Settings{
     static bool firststart = false;
     static void FirstStart(void){
         if (!firststart) return;
-        QFileDialog *dialog = new QFileDialog();
-        dialog->setWindowTitle("Select path to game");
-        dialog->setOption(QFileDialog::ShowDirsOnly);
-        dialog->setFileMode(QFileDialog::Directory);
-        dialog->show();
-
-        auto save = [](QFileDialog *stance) { Settings::Save;
-                                              delete stance; };
-        SmartConnect con(dialog, )
-
-        JKFolder = QFileDialog::getExistingDirectory(nullptr, QString("Select path to game"), Settings::LauncherPath);
+            JKFolder = QFileDialog::getExistingDirectory(nullptr, QString("Select path to game"), Settings::LauncherPath);
     }
 
 
