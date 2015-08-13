@@ -14,5 +14,5 @@
 #include "network.h"
 #include "starter.h"
 
-#define QStringPTChar(x) x->toLocal8Bit().data()
-#define QStringTChar(x) x.toLocal8Bit().data()
+#define QStringPTChar(x) (x)->toLocal8Bit().data()
+#define QStringTChar(x) (x).toLocal8Bit().data()

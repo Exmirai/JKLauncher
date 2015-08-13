@@ -2,12 +2,12 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    Settings::LauncherPath = a.applicationDirPath();
+    QApplication app(argc, argv);
+    Settings::LauncherPath = app.applicationDirPath();
     Settings::Load();
-    MainWindow w;
-    w.show();
+    MainWindow mainWindow;
+    mainWindow.show();
     Starter::Start();
-    return a.exec();
+    return app.exec();
 }
 
