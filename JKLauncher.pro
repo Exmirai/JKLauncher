@@ -38,3 +38,8 @@ FORMS    += forms/mainwindow.ui \
             forms/settings.ui
 
 RESOURCES += resources/resources.qrc
+
+win32: LIBS += -L$$PWD/lib/ -llibeay32
+
+INCLUDEPATH += $$PWD/openssl
+DEPENDPATH += $$PWD/openssl
