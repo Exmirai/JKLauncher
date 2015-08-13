@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "launcher.h"
 
 #include "ui_mainwindow.h"
 #include "ui_settings.h"
@@ -11,4 +11,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),ui(new Ui::MainWin
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event){
+    Settings::Save();
 }
