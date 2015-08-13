@@ -14,6 +14,8 @@
 
 /.qmake.cache
 /.qmake.stash
+/debug
+/release
 *.pro.user
 *.pro.user.*
 *.moc

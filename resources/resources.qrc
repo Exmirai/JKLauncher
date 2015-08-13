@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/icon"/>
+    <qresource prefix="/background"/>
+    <qresource prefix="/locale"/>
+</RCC>
