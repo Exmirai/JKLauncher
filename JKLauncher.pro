@@ -19,7 +19,9 @@ SOURCES += source/main.cpp\
     source/profiles.cpp \
     source/network.cpp \
     source/starter.cpp \
-    source/smartconnect.cpp
+    source/smartconnect.cpp \
+    source/AESWrapper.cpp \
+    source/RSAWrapper.cpp
 
 HEADERS  += json/cJSON.h \
             source/mainwindow.h \
@@ -28,7 +30,9 @@ HEADERS  += json/cJSON.h \
     source/network.h \
     source/settings.h \
     source/starter.h \
-    source/smartconnect.h
+    source/smartconnect.h \
+    source/AESWrapper.h \
+    source/RSAWrapper.h
 
 FORMS    += forms/mainwindow.ui \
             forms/settings.ui
