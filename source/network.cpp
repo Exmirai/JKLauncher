@@ -5,7 +5,7 @@
 #include <QNetworkReply>
 
 
-void DoRequest(QString &request){
-
+void DoRequest(QString &request)
+{
 
 }

@@ -3,9 +3,10 @@
 #include <QMainWindow>
 #include <QWidget>
 
-namespace Ui {
-class MainWindow;
-class Setting;
+namespace Ui
+{
+    class MainWindow;
+    class Setting;
 }
 
 class MainWindow : public QMainWindow

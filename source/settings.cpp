@@ -3,7 +3,10 @@
 #include <QFileDialog>
 
 
-namespace Settings{
+namespace Settings
+{
+    const char settingsFileName[] = "settings.dat";
+
     QString JKFolder; // path to game
     QString LauncherPath;
     size_t memory = 1024; //
@@ -14,79 +17,91 @@ namespace Settings{
 
     renderer_t renderer = RENDERER_VANILLA;
 
+    static bool isFirstStart = false;
 
-    static bool firststart = false;
-    static void FirstStart(void){
-        if (!firststart) return;
-            JKFolder = QFileDialog::getExistingDirectory(nullptr, QString("Select path to game"), Settings::LauncherPath);
+    static void FirstStart(void)
+    {
+        if (!isFirstStart)
+            return;
+
+        JKFolder = QFileDialog::getExistingDirectory(nullptr, QString("Select path to game"), Settings::LauncherPath);
     }
 
 
-    void Save(void){
-    cJSON *json = cJSON_CreateObject(), *node, *temp;
-    FILE *instance = fopen("settings.dat","w");
-    if (!instance){
-        return;
-    }
-    //Actualy serializing
-    node = cJSON_CreateObject();
-    cJSON_AddStringToObject(node, "gamepath", QStringTChar(JKFolder));
-    cJSON_AddIntegerToObject(node, "memory", memory);
-    cJSON_AddIntegerToObject(node, "renderer", renderer);
-    cJSON_AddIntegerToObject(node, "resolutionX", resolutionX);
-    cJSON_AddIntegerToObject(node, "resolutionY", resolutionY);
-    cJSON_AddBooleanToObject(node, "autoconnect", autoconnect);
+    void Save(void)
+    {
+        cJSON *json = cJSON_CreateObject(), *node, *temp;
+        FILE *instance = fopen(settingsFileName, "w");
+
+        if (!instance)
+        {
+            return;
+        }
+
+        //Actualy serializing
+        node = cJSON_CreateObject();
+        cJSON_AddStringToObject(node, "gamepath", QStringTChar(JKFolder));
+        cJSON_AddIntegerToObject(node, "memory", memory);
+        cJSON_AddIntegerToObject(node, "renderer", renderer);
+        cJSON_AddIntegerToObject(node, "resolutionX", resolutionX);
+        cJSON_AddIntegerToObject(node, "resolutionY", resolutionY);
+        cJSON_AddBooleanToObject(node, "autoconnect", autoconnect);
 
 
-    cJSON_AddItemToObject(json, "settings", node);
+        cJSON_AddItemToObject(json, "settings", node);
 
-    node = cJSON_CreateArray();
+        node = cJSON_CreateArray();
 
-    foreach(Profile *pro, profile_list){
-        temp = cJSON_CreateObject();
-        cJSON_AddStringToObject(temp, "username", QStringTChar(pro->name));
-        cJSON_AddStringToObject(temp, "password", QStringTChar(pro->password));
+        foreach(Profile *pro, profile_list)
+        {
+            temp = cJSON_CreateObject();
+            cJSON_AddStringToObject(temp, "username", QStringTChar(pro->name));
+            cJSON_AddStringToObject(temp, "password", QStringTChar(pro->password));
 
-        cJSON_AddItemToArray(node, temp);
-    }
+            cJSON_AddItemToArray(node, temp);
+        }
 
-    cJSON_AddItemToObject(json, "profiles", node);
-    //
-    const char *buffer = cJSON_Serialize( json, 1 );
-    if ( fwrite(buffer, strlen(buffer), 1, instance ) != strlen(buffer)){
+        cJSON_AddItemToObject(json, "profiles", node);
+
+        const char *buffer = cJSON_Serialize( json, 1 );
+        if ( fwrite(buffer, strlen(buffer), 1, instance ) != strlen(buffer))
+        {
+            fclose(instance);
+            return;
+        }
+
         fclose(instance);
-        free((void *)buffer);
-        return;
-    }
-    fclose(instance);
-    free((void *)buffer);
     }
 
-    void Load(void){
+    void Load(void)
+    {
         long length;
         char *buffer;
         cJSON *json, *node, *temp;
         FILE *instance;
         // Open
 
-        instance = fopen("settings.dat", "r");
+        instance = fopen(settingsFileName, "r");
         if (instance == nullptr){
-            firststart = true;
+            isFirstStart = true;
             Settings::FirstStart();
             return;
         }
-        instance = fopen("settings.dat", "r"); // Reopen -.-
+
+        instance = fopen(settingsFileName, "r"); // Reopen -.-
 
         // obtain file size:
         fseek(instance , 0 , SEEK_END);
         length = ftell(instance);
         rewind(instance);
+
         //Buffer
-        buffer = (char *)malloc(sizeof(char)*length);
-        if ( fread(buffer, 1, length, instance) != length){
-          free(buffer);
-          fclose(instance);
-          return;
+        buffer = (char *)calloc(length, sizeof(char));
+        if ( fread(buffer, 1, length, instance) != length)
+        {
+            free(buffer);
+            fclose(instance);
+            return;
         }
 
         json = cJSON_Parse(buffer);
@@ -112,8 +127,10 @@ namespace Settings{
         autoconnect = cJSON_ToBoolean(temp);
 
         node = cJSON_GetObjectItem(json, "profiles");
+
         int numElements = cJSON_GetArraySize( node );
-        for (int i = 0; i < numElements && i < MAX_PROFILES; i++ ) {
+        for (int i = 0; i < numElements && i < MAX_PROFILES; i++ )
+        {
             cJSON *element1, *element2;
             temp = cJSON_GetArrayItem(node, i);
 
@@ -122,6 +139,5 @@ namespace Settings{
 
             new Profile(cJSON_ToString(element1), cJSON_ToString(element2));
         }
-        //
     }
 }

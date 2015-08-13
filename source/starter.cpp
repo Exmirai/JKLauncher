@@ -1,11 +1,14 @@
 #include "launcher.h"
 
-namespace Starter{
+
+namespace Starter
+{
     bool isrunning;
     QProcess *process;
 
-
-    void Start(void){
+    void Start(void)
+    {
+        //TODO: remove magic strings
         QStringList arguments;
         arguments << "+set" << "fs_game" << "japlus";
         process = new QProcess(); //create process instance
@@ -14,10 +17,11 @@ namespace Starter{
         qDebug() << Settings::JKFolder;
     }
 
-    void Stop(void){
-        if (process != nullptr && process->Running){
+    void Stop(void)
+    {
+        if (process != nullptr && process->Running)
+        {
             process->kill();
         }
-
     }
 }
