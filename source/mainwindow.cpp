@@ -3,8 +3,9 @@
 #include "ui_mainwindow.h"
 #include "ui_settings.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),ui(new Ui::MainWindow)
+MainWindow::MainWindow(QApplication *app,QWidget *parent) : QMainWindow(parent),ui(new Ui::MainWindow)
 {
+	this->app = app;
     ui->setupUi(this);
 }
 
@@ -16,4 +17,5 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event){
     Settings::Save();
+	//app->quit();
 }

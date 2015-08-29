@@ -17,12 +17,9 @@ namespace Settings
 
     renderer_t renderer = RENDERER_VANILLA;
 
-    static bool isFirstStart = false;
 
     static void FirstStart(void)
     {
-        if (!isFirstStart)
-            return;
 
         JKFolder = QFileDialog::getExistingDirectory(nullptr, QString("Select path to game"), Settings::LauncherPath);
     }
@@ -83,12 +80,9 @@ namespace Settings
 
         instance = fopen(settingsFileName, "r");
         if (instance == nullptr){
-            isFirstStart = true;
             Settings::FirstStart();
             return;
         }
-
-        instance = fopen(settingsFileName, "r"); // Reopen -.-
 
         // obtain file size:
         fseek(instance , 0 , SEEK_END);
@@ -114,8 +108,11 @@ namespace Settings
         temp = cJSON_GetObjectItem(node, "memory");
         memory = cJSON_ToInteger(temp);
 
-        temp = cJSON_GetObjectItem(node, "renderer");
+        temp = cJSON_GetObjectItem(node, "gamepath");
         JKFolder = cJSON_ToString(temp);
+
+        temp = cJSON_GetObjectItem(node, "renderer");
+        renderer = (renderer_t)cJSON_ToInteger(temp);
 
         temp = cJSON_GetObjectItem(node, "resolutionX");
         resolutionX = cJSON_ToInteger(temp);
