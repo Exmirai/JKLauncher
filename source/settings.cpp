@@ -20,8 +20,8 @@ namespace Settings
 
     static void FirstStart(void)
     {
-
         JKFolder = QFileDialog::getExistingDirectory(nullptr, QString("Select path to game"), Settings::LauncherPath);
+		JKFolder.append("/");
     }
 
 
@@ -61,6 +61,7 @@ namespace Settings
         cJSON_AddItemToObject(json, "profiles", node);
 
         const char *buffer = cJSON_Serialize( json, 1 );
+
         if ( fwrite(buffer, strlen(buffer), 1, instance ) != strlen(buffer))
         {
             fclose(instance);
@@ -68,6 +69,7 @@ namespace Settings
         }
 
         fclose(instance);
+		cJSON_Delete(json);
     }
 
     void Load(void)
@@ -136,5 +138,6 @@ namespace Settings
 
             new Profile(cJSON_ToString(element1), cJSON_ToString(element2));
         }
+		cJSON_Delete(json);
     }
 }

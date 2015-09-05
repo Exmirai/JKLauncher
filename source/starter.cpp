@@ -17,11 +17,14 @@ namespace Starter
         process = new QProcess(); //create process instance
 
 		onexit = new SmartConnect(process, SIGNAL(finished(int, QProcess::ExitStatus)), [](void *arg1, void *arg2){
-																													qDebug() << (int)arg1; 
+																													qDebug() << (int)arg1;  //ErrorCodes for JKA: 0 success,
+																																		    //                    1 manual kill || interrupt signal
+																																			//                    2 other signals
+																																			//					  3 error
 																													qDebug() << (QProcess::ExitStatus*)arg2; 
 																												  });
 
-        process->start(Settings::JKFolder + "/openjk.x86", arguments);
+        process->start(Settings::JKFolder + "openjk.x86", arguments);
     }
 
     void Stop(void)

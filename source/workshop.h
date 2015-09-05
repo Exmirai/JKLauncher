@@ -38,6 +38,7 @@ public:
 
 	static void Init(void);
 	static Modification* GetMod(int id);
+	static void GetModificationsList(Type type);
 
 	static QString currentmod;
 	static QString currentrender;
